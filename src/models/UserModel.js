@@ -28,7 +28,7 @@ UserSchema.methods.crypto = async (password) => {
   return hash;
 };
 
-UserSchema.methods.veryPass = async (password, elderpassword) => {
+UserSchema.methods.verifPass = async (password, elderpassword) => {
   const result = await bcrypt.compare(password, elderpassword);
   return result;
 };
