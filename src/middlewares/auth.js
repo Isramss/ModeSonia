@@ -17,6 +17,7 @@ const auth = (req, res, next) => {
     next();
   } catch (error) {
     res.status(401).json({ message: "Token invalide." });
+    æ;
   }
 };
 const generateAuthToken = (user) => {

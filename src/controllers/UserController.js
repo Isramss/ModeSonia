@@ -1,18 +1,41 @@
+import { generateAuthToken } from "../middlewares/auth";
 import User from "../models/UserModel";
 
-const saveUser = async (req, res) => {
+const inscription = async (req, res) => {
+  console.log(req.body);
   try {
-    const newUser = await new User();
-    newUser.name = req.body.name;
-    newUser.email = req.body.email;
-    newUser.adress = req.body.address;
-    newUser.zipcode = req.body.zipcode;
-    newUser.password = await newUser.crypto(req.body.password);
-    newUser.save();
-    const token = generateAuthToken(newUser);
-    res.json({ newUser, token });
+    let newUser = await User.create(req.body);
+    // console.log(newUser.fullname);
+    res.json({ message: "User created", newUser });
   } catch (error) {
-    console.log(error);
+    console.log("Erreur lors de la création de l'utilisateur:");
+  }
+};
+const listUsers = async (req, res) => {
+  try {
+    let users = await User.find();
+    res.json(
+      users.map((user) => ({
+        ...user.toObject(),
+        fullname: user.fullname,
+      }))
+    );
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      // Vérifiez si aucun utilisateur n'a été trouvé avec cet ID
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ user, message: "User deleted" });
+  } catch (error) {
+    res.status(400).json({ message: " error delete" });
   }
 };
 
@@ -32,4 +55,4 @@ const login = async (req, res) => {
   }
 };
 
-export { saveUser, login };
+export { inscription, login, listUsers, deleteUser };

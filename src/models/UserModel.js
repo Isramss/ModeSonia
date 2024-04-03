@@ -1,17 +1,23 @@
 import { mongoose, Schema } from "mongoose";
+import bcrypt from "bcryptjs";
 
 const UserSchema = new Schema({
   name: {
-    type: String,
+    first: {
+      type: String,
+      trim: true,
+    },
+    last: {
+      type: String,
+      trim: true,
+    },
   },
 
   email: {
     type: String,
-    required: true,
-    lowercase: true,
     unique: true,
   },
-  adress: {
+  address: {
     type: String,
   },
   zipcode: {
@@ -19,8 +25,32 @@ const UserSchema = new Schema({
     min: [1000, "Le Code Postal est trop court"],
     max: 99999,
   },
-  password: { type: String, min: [6, "Must be at least 6 characters"] },
+  password: {
+    type: String,
+    min: [6, "Must be at least 6 characters"],
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+UserSchema.virtual("fullname").get(function () {
+  return `${this.name.first} ${this.name.last}`;
+});
+
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  try {
+    const hashedPassword = await bcrypt.hash(this.password, 10);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+//Vor si c'est a modifier ou meme re adapter
 
 UserSchema.methods.crypto = async (password) => {
   const salt = await bcrypt.genSalt(10);
@@ -28,8 +58,8 @@ UserSchema.methods.crypto = async (password) => {
   return hash;
 };
 
-UserSchema.methods.verifPass = async (password, elderpassword) => {
-  const result = await bcrypt.compare(password, elderpassword);
+UserSchema.methods.verifPass = async (password, elderPassword) => {
+  const result = await bcrypt.compare(password, elderPassword);
   return result;
 };
 
