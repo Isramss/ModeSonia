@@ -10,6 +10,10 @@ import path from "path";
 import cors from "cors";
 
 import mongoose from "mongoose";
+import authRoute from "./routes/UserRouter";
+import { auth } from "./middlewares/auth";
+import articleRoute from "./routes/articleRouter";
+
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(process.env.MONGODB_URL);
@@ -23,6 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 // Partie URL :
 
 app.get("/", (req, res) => res.send("Welcome to API ModeSonia !"));
+app.use("/auth", authRoute);
+app.use("/articles", articleRoute);
 
 app.listen(port, () =>
   console.log(`[Server] is running on http://localhost:${port}`)
