@@ -27,6 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 // Partie URL :
 
 app.get("/", (req, res) => res.send("Welcome to API ModeSonia !"));
+app.use(express.static("/uploads"));
 app.use("/auth", authRoute);
 app.use("/articles", articleRoute);
 

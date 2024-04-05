@@ -5,7 +5,7 @@ const articleSchema = new Schema(
     title_Produit: { type: String, required: true, unique: true },
     imageURL: {
       type: String,
-      required: true,
+      // required: true,
     },
     price: {
       type: Number,

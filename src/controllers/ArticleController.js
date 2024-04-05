@@ -21,14 +21,16 @@ const getArticle = async (req, res) => {
 const creatArticle = async (req, res) => {
   const { title_Produit, imageURL, price, description } = req.body;
   try {
-    const articles = new Article({
+    // const imageURL = req.file.filename;
+    const article = new Article({
       title_Produit,
       imageURL,
       price,
       description,
     });
-    await articles.save();
-    res.json({ message: "Article created", articles });
+    console.log(article);
+    await article.save();
+    res.json({ message: "Article created", article });
   } catch (error) {
     res.status(400).json({ message: "error create article" });
   }

@@ -7,13 +7,18 @@ import {
   updateArticle,
 } from "../controllers/ArticleController";
 import { auth } from "../middlewares/auth";
+import uploadImageArticle from "../middlewares/multer";
 
 const articleRoute = Router();
 
 articleRoute.get("/", getAllArticles);
 articleRoute.get("/:id", getArticle);
-articleRoute.post("/newarticle", creatArticle);
+articleRoute.post(
+  "/newarticle",
+  uploadImageArticle.single("imageURL"),
+  creatArticle
+);
 articleRoute.delete("/delete/:id", deleteArticle);
-articleRoute.post("/update/:id", auth, updateArticle);
+articleRoute.put("/update/:id", updateArticle);
 
 export default articleRoute;
