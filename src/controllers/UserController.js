@@ -5,6 +5,7 @@ const inscription = async (req, res) => {
   console.log(req.body);
   try {
     let newUser = await User.create(req.body);
+    // ajouter un cart (cart.create())
     // console.log(newUser.fullname);
     res.json({ message: "User created", newUser });
   } catch (error) {
@@ -25,6 +26,15 @@ const listUsers = async (req, res) => {
   }
 };
 
+const OneUser = async (req, res) => {
+  try {
+    const user = await User.findById({ _id: req.params.id });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 const deleteUser = async (req, res) => {
   const userId = req.params.id;
   try {
@@ -36,6 +46,26 @@ const deleteUser = async (req, res) => {
     res.json({ user, message: "User deleted" });
   } catch (error) {
     res.status(400).json({ message: " error delete" });
+  }
+};
+
+const updateUsers = async (req, res) => {
+  const { id } = req.params;
+  const { email, address, zipcode } = req.body;
+
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      id,
+      {
+        email,
+        address,
+        zipcode,
+      },
+      { new: true }
+    );
+    res.json({ message: "User updated", updateUser });
+  } catch (error) {
+    res.status(400).json({ message: "error update user" });
   }
 };
 
@@ -55,4 +85,4 @@ const login = async (req, res) => {
   }
 };
 
-export { inscription, login, listUsers, deleteUser };
+export { inscription, login, listUsers, OneUser, deleteUser, updateUsers };

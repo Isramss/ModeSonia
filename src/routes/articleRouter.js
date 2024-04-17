@@ -15,10 +15,10 @@ articleRoute.get("/", getAllArticles);
 articleRoute.get("/:id", getArticle);
 articleRoute.post(
   "/newarticle",
-  uploadImageArticle.single("imageURL"),
+  // uploadImageArticle.single("imageURL"),
   creatArticle
 );
-articleRoute.delete("/delete/:id", deleteArticle);
 articleRoute.put("/update/:id", updateArticle);
+articleRoute.delete("/delete/:id", deleteArticle);
 
 export default articleRoute;

@@ -11,8 +11,9 @@ import cors from "cors";
 
 import mongoose from "mongoose";
 import authRoute from "./routes/UserRouter";
-import { auth } from "./middlewares/auth";
+// import { auth } from "./middlewares/auth";
 import articleRoute from "./routes/articleRouter";
+import cartRoute from "./routes/CartRouter";
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -30,6 +31,7 @@ app.get("/", (req, res) => res.send("Welcome to API ModeSonia !"));
 app.use(express.static("/uploads"));
 app.use("/auth", authRoute);
 app.use("/articles", articleRoute);
+app.use("/cart", cartRoute);
 
 app.listen(port, () =>
   console.log(`[Server] is running on http://localhost:${port}`)

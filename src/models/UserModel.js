@@ -16,6 +16,15 @@ const UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
+    validate: {
+      validator: function (v) {
+        return v.endsWith(".fr") || v.endsWith(".com");
+        // oblige de finir un mail par .fr ||.com
+      },
+      message: (props) =>
+        `${props.value} n'est pas une adresse e-mail valide, veuillez utiliser une adresse se terminant par .fr ou .com`,
+      // envoi un message d'erreur dans la console
+    },
   },
   address: {
     type: String,
@@ -33,6 +42,7 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  cart: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cart" }],
 });
 
 UserSchema.virtual("fullname").get(function () {
@@ -50,7 +60,7 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-//Vor si c'est a modifier ou meme re adapter
+//Voir si c'est a modifier ou meme re adapter
 
 UserSchema.methods.crypto = async (password) => {
   const salt = await bcrypt.genSalt(10);
