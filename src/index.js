@@ -11,7 +11,7 @@ import cors from "cors";
 
 import mongoose from "mongoose";
 import authRoute from "./routes/UserRouter";
-// import { auth } from "./middlewares/auth";
+import { auth } from "./middlewares/auth";
 import articleRoute from "./routes/articleRouter";
 import cartRoute from "./routes/CartRouter";
 

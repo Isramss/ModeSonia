@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { auth } from "../middlewares/auth";
 import {
   deleteUser,
   inscription,
@@ -9,7 +10,7 @@ import {
 } from "../controllers/UserController";
 const authRoute = Router();
 
-authRoute.get("/", listUsers);
+authRoute.get("/", auth, listUsers);
 authRoute.post("/inscription", inscription);
 authRoute.post("/login", login);
 authRoute.put("/edit/:id", updateUsers);

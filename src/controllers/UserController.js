@@ -13,14 +13,19 @@ const inscription = async (req, res) => {
   }
 };
 const listUsers = async (req, res) => {
+  const isAdmin = req.user.isAdmin;
   try {
-    let users = await User.find();
-    res.json(
-      users.map((user) => ({
-        ...user.toObject(),
-        fullname: user.fullname,
-      }))
-    );
+    if (isAdmin) {
+      let users = await User.find();
+      res.json(
+        users.map((user) => ({
+          ...user.toObject(),
+          fullname: user.fullname,
+        }))
+      );
+    } else {
+      res.status(401).send("non-authorized");
+    }
   } catch (error) {
     res.status(500).json(error.message);
   }
