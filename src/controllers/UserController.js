@@ -5,11 +5,25 @@ const inscription = async (req, res) => {
   console.log(req.body);
   try {
     let newUser = await User.create(req.body);
-    // ajouter un cart (cart.create())
-    // console.log(newUser.fullname);
+
     res.json({ message: "User created", newUser });
   } catch (error) {
     console.log("Erreur lors de la création de l'utilisateur:");
+  }
+};
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email: email }).select("+password");
+    const verify = await user.verifPass(password, user.password);
+    if (!verify) {
+      const error = new Error("Le mot de passe est incorrect");
+      throw error;
+    }
+    const token = generateAuthToken(user);
+    res.json({ message: "success", token });
+  } catch (error) {
+    res.json({ message: "error" + error });
   }
 };
 const listUsers = async (req, res) => {
@@ -33,22 +47,39 @@ const listUsers = async (req, res) => {
 
 const OneUser = async (req, res) => {
   try {
-    const user = await User.findById({ _id: req.params.id });
-    res.json(user);
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (user) {
+      res.json({
+        id: user.id,
+        // name: user.name.first,
+        email: user.email,
+        address: user.address,
+        zipcode: user.zipcode,
+      });
+    } else {
+      res.status(401).send("user not found");
+    }
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
 const deleteUser = async (req, res) => {
+  const isAdmin = req.user.isAdmin;
   const userId = req.params.id;
   try {
-    const user = await User.findByIdAndDelete(userId);
-    if (!user) {
-      // Vérifiez si aucun utilisateur n'a été trouvé avec cet ID
-      return res.status(404).json({ message: "User not found" });
+    if (isAdmin) {
+      const user = await User.findByIdAndDelete(userId);
+      if (!user) {
+        // Vérifiez si aucun utilisateur n'a été trouvé avec cet ID
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json({ user, message: "User deleted" });
+    } else {
+      res.status(401).send("non-authorized");
     }
-    res.json({ user, message: "User deleted" });
   } catch (error) {
     res.status(400).json({ message: " error delete" });
   }
@@ -56,12 +87,13 @@ const deleteUser = async (req, res) => {
 
 const updateUsers = async (req, res) => {
   const { id } = req.params;
-  const { email, address, zipcode } = req.body;
+  const { name, email, address, zipcode } = req.body;
 
   try {
     const updateUser = await User.findByIdAndUpdate(
       id,
       {
+        name,
         email,
         address,
         zipcode,
@@ -71,22 +103,6 @@ const updateUsers = async (req, res) => {
     res.json({ message: "User updated", updateUser });
   } catch (error) {
     res.status(400).json({ message: "error update user" });
-  }
-};
-
-const login = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email: email }).select("+password");
-    const verify = await user.verifPass(password, user.password);
-    if (!verify) {
-      const error = new Error("Le mot de passe est incorrect");
-      throw error;
-    }
-    const token = generateAuthToken(user);
-    res.json({ message: "success", token });
-  } catch (error) {
-    res.json({ message: "error" + error });
   }
 };
 

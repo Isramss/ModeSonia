@@ -13,9 +13,9 @@ const authRoute = Router();
 authRoute.get("/", auth, listUsers);
 authRoute.post("/inscription", inscription);
 authRoute.post("/login", login);
+authRoute.get("/:id", auth, OneUser);
 authRoute.put("/edit/:id", updateUsers);
-authRoute.delete("/delete/:id", deleteUser);
-authRoute.get("/:id", OneUser);
+authRoute.delete("/delete/:id", auth, deleteUser);
 
 // avec authentification Admin pour ajouter /modifier / et supprimer des users
 
