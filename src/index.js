@@ -21,7 +21,11 @@ async function main() {
   console.log(`[ DATABASE ] MongoDB connected !!`);
 }
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://mode-sonia-front.vercel.app",
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
