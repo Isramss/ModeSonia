@@ -14,6 +14,7 @@ import authRoute from "./routes/UserRouter";
 import { auth } from "./middlewares/auth";
 import articleRoute from "./routes/articleRouter";
 import cartRoute from "./routes/CartRouter";
+import paymentRoute from "./paymentRoute";
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => res.send("Welcome to API ModeSonia !"));
 app.use(express.static("/uploads"));
 app.use("/auth", authRoute);
+app.use("/payment", paymentRoute);
 app.use("/articles", articleRoute);
 app.use("/cart", cartRoute);
 
