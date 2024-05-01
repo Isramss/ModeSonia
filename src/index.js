@@ -5,6 +5,7 @@ dotenv.config();
 const app = express();
 
 const port = process.env.PORT;
+// const stripe = process.env.STRIPE_SECRET_KEY;
 
 import path from "path";
 import cors from "cors";
@@ -14,7 +15,7 @@ import authRoute from "./routes/UserRouter";
 import { auth } from "./middlewares/auth";
 import articleRoute from "./routes/articleRouter";
 import cartRoute from "./routes/CartRouter";
-import paymentRoute from "./paymentRoute";
+import paymentRoute from "./routes/paymentRoute";
 
 main().catch((err) => console.log(err));
 async function main() {
