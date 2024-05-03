@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT;
 // const stripe = process.env.STRIPE_SECRET_KEY;
 
-import path from "path";
+// import path from "path";
 import cors from "cors";
 
 import mongoose from "mongoose";
