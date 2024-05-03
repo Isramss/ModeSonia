@@ -13,6 +13,11 @@ const articleSchema = new Schema(
     description: {
       type: String,
     },
+    stock: {
+      type: Number,
+      required: true,
+      min: [0, "Stock can not be less than 0."],
+    },
     quantity: {
       type: Number,
 

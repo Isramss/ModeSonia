@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "backpack build",
+    "build": "backpack",
     "dev": "backpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

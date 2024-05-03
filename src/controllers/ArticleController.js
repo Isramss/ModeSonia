@@ -20,7 +20,7 @@ const getArticle = async (req, res) => {
 
 const creatArticle = async (req, res) => {
   const isAdmin = req.user.isAdmin;
-  const { title_Produit, imageURL, price, description } = req.body;
+  const { title_Produit, imageURL, price, description, stock } = req.body;
   try {
     if (isAdmin) {
       const article = new Article({
@@ -28,6 +28,7 @@ const creatArticle = async (req, res) => {
         imageURL,
         price,
         description,
+        stock,
       });
       console.log(article);
       await article.save();
