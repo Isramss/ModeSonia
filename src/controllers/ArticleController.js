@@ -45,7 +45,7 @@ const creatArticle = async (req, res) => {
 const updateArticle = async (req, res) => {
   const isAdmin = req.user.isAdmin;
   const { id } = req.params;
-  const { title_Produit, imageURL, price, description } = req.body;
+  const { title_Produit, imageURL, price, description, stock } = req.body;
   try {
     if (isAdmin) {
       const updatedArticle = await Article.findByIdAndUpdate(
@@ -55,6 +55,7 @@ const updateArticle = async (req, res) => {
           imageURL,
           price,
           description,
+          stock,
         },
         { new: true }
       );
